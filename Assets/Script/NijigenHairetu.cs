@@ -59,6 +59,21 @@ public class NijigenHairetu : MonoBehaviour
         Debug.Log($"2次元目の要素数={iAry.GetLength(1)}");
 
 
+        // ジャグ配列（配列の配列）
+        // int型の1次元配列を要素とする配列を作りたい
+        var r1 = new int[3]; // □□□
+        var r2 = new int[2]; // □□
+        var r3 = new int[5]; // □□□□□
+
+        // これがジャグ配列
+        // 似ているけれど、2次元配列とは別の概念
+        int[][] jagiAry = new int[][] { r1, r2, r3 }; // 要素が配列型
+
+        // new int[3, 5] 2次元配列のイメージ
+        // □□□□□
+        // □□□□□
+        // □□□□□
+
         // 繰り返し文を使った2次元配列の処理
         for (var i = 0; i < iAry.GetLength(0); i++) // 1次元目の処理
         {
