@@ -3,9 +3,12 @@ using UnityEngine.UI;
 
 public class Sample : MonoBehaviour
 {
+    [SerializeField]
+    private int _count = 5;
+
     private GameObject[] _cells;
-    private int _selectedIndex = 0;
-    [SerializeField] uint _count = 0;
+    private int _selectedIndex;
+
     private void Start()
     {
         _cells = new GameObject[_count];
@@ -16,48 +19,52 @@ public class Sample : MonoBehaviour
             obj.AddComponent<Image>();
             _cells[i] = obj;
         }
+        OnSelectedChanged();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow)) // 左キーを押した
+        var V =
+            (Input.GetKeyDown(KeyCode.LeftArrow) ? -1 : 0) +
+            (Input.GetKeyDown(KeyCode.RightArrow) ? 1 : 0 );
+        if ( V != 0 ) // 左キーを押した
         {
-
-            _selectedIndex--;
+            _selectedIndex += V;
+            OnSelectedChanged();
         }
-        if (Input.GetKeyDown(KeyCode.RightArrow)) // 右キーを押した
-        {
-            _selectedIndex++;
-        }
-        if (Input.GetButtonDown("Jump"))
+        
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             var cell = _cells[_selectedIndex];
             Destroy(cell);
-            //_cells[_selectedIndex].SetActive(false);
+            OnSelectedChanged();
         }
-
-        OnselectedChanged();
+        Normalized();
     }
 
-    private void OnselectedChanged()
+    private void OnSelectedChanged()
     {
-        for (var i = 0; i < _count; i++)
+        for (var i = 0; i < _cells.Length; i++)
         {
-            var cell = _cells[i]; ;
+            var cell = _cells[i];
             if (!cell) { continue; }
-
             var image = cell.GetComponent<Image>();
-
-            if (i == _selectedIndex) { image.color = Color.red; }
-            else { image.color = Color.white; }
+            if (i == _selectedIndex)
+            { 
+                image.color = Color.red;
+            }
+            else
+            { 
+                image.color = Color.white;
+            }
         }
-        if (_selectedIndex > _cells.Length - 1)
-        {
-            _selectedIndex = _cells.Length - 1;
-        }
-        else if (_selectedIndex < 0)
-        {
+    }
+    void Normalized()
+    {
+        if (_selectedIndex < 0)
             _selectedIndex = 0;
-        }
+        if (_selectedIndex > _cells.Length - 1)
+            _selectedIndex = _cells.Length - 1;
+        OnSelectedChanged();
     }
 }
