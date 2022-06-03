@@ -3,28 +3,31 @@ using UnityEngine.UI;
 
 public class Sample2ndAnswer : MonoBehaviour
 {
-    GameObject[,] _cells;//多次元配列
-    int _selectedCollum;//行
-    int _selectedRow;//列
+    [SerializeField]
+    private int _rows = 5;
+
+    [SerializeField]
+    private int _columns = 5;
+
+    private GameObject[,] _cells;
+    private int _selectedRow; // 選択行
+    private int _selectedColumn; // 選択列
+
     private void Start()
     {
-        _cells = new GameObject[5,5];
-        for (var r = 0; r < 5; r++)
+        _cells = new GameObject[_rows, _columns];
+
+        var layout = GetComponent<GridLayoutGroup>();
+        layout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+        layout.constraintCount = _columns;
+
+        for (var r = 0; r < _cells.GetLength(0); r++)
         {
-            for (var c = 0; c < 5; c++)
+            for (var c = 0; c < _cells.GetLength(1); c++)
             {
                 var obj = new GameObject($"Cell({r}, {c})");
                 obj.transform.parent = transform;
-
-                var image = obj.AddComponent<Image>();
-                if (r == 0 && c == 0) 
-                { 
-                    image.color = Color.red;
-                }
-                else 
-                { 
-                    image.color = Color.white;
-                }
+                obj.AddComponent<Image>();
                 _cells[r, c] = obj;
             }
         }
@@ -34,38 +37,44 @@ public class Sample2ndAnswer : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.LeftArrow)) // 左キーを押した
         {
-            _selectedCollum++;
+            if (_selectedColumn - 1 >= 0)
+                _selectedColumn--;
         }
         if (Input.GetKeyDown(KeyCode.RightArrow)) // 右キーを押した
         {
-            _selectedCollum--;
+            if (_selectedColumn + 1 < _cells.GetLength(1))
+                _selectedColumn++;
         }
         if (Input.GetKeyDown(KeyCode.UpArrow)) // 上キーを押した
         {
-            _selectedRow++;
+            if (_selectedRow - 1 >= 0)
+                _selectedRow--;
         }
         if (Input.GetKeyDown(KeyCode.DownArrow)) // 下キーを押した
         {
-            _selectedRow--;
+            if (_selectedRow + 1 < _cells.GetLength(0))
+                _selectedRow++;
         }
-        OnSelectedChanges();
-    }
-    void OnSelectedChanges()
-    {
-        for (var r = 0; r < 5; r++)
+
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            for (var c = 0; c < 5; c++)
+            var cell = _cells[_selectedRow, _selectedColumn];
+            var image = cell.GetComponent<Image>();
+            // image.color = Color.clear; // 画像の色を透明に
+            image.enabled = false; // Image コンポーネントを無効
+        }
+
+        for (var r = 0; r < _cells.GetLength(0); r++)
+        {
+            for (var c = 0; c < _cells.GetLength(1); c++)
             {
                 var cell = _cells[r, c];
                 var image = cell.GetComponent<Image>();
-                if (r == _selectedRow && c == _selectedCollum)
+                if (r == _selectedRow && c == _selectedColumn)
                 {
                     image.color = Color.red;
                 }
-                else 
-                { 
-                    image.color = Color.white; 
-                }
+                else { image.color = Color.white; }
             }
         }
     }
