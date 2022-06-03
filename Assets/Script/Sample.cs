@@ -3,9 +3,9 @@ using UnityEngine.UI;
 
 public class Sample : MonoBehaviour
 {
-    [SerializeField]
-    private int _count = 5;
-
+    //[SerializeField] private int _row = 5;
+    //[SerializeField] private int _column = 5;
+    [SerializeField] private int _count = 5;
     private GameObject[] _cells;
     private int _selectedIndex;
 
