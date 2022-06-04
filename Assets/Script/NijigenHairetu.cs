@@ -2,6 +2,7 @@
 
 public class NijigenHairetu : MonoBehaviour
 {
+    Rigidbody2D a;
     private void Start()
     {
         // 2次元配列とは
@@ -86,6 +87,11 @@ public class NijigenHairetu : MonoBehaviour
         foreach (var i in iAry)
         {
             Debug.Log(i);
+            
         }
+        
     }
+
+
+    
 }
