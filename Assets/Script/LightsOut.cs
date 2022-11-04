@@ -48,8 +48,8 @@ public class LightsOut : MonoBehaviour, IPointerClickHandler
     {
         var cell = eventData.pointerCurrentRaycast.gameObject;
         var image = cell.GetComponent<Image>();
-        _selectedRow = int.Parse(cell.name);
-        Debug.Log(_selectedRow);
+        //_selectedRow = int.Parse(cell.name);
+        //Debug.Log(_selectedRow);
         if(image.color == Color.black)//課題１：クリックしたセルの色を反転
         {
             image.color = Color.white;
@@ -58,10 +58,32 @@ public class LightsOut : MonoBehaviour, IPointerClickHandler
         {
             image.color = Color.black;
         }
-        //AroundChange();
+
+        AroundChange(eventData);
+
     }
-    public void AroundChange(int num)
+    public void ColorReturn()
     {
 
+    }
+    public void AroundChange(PointerEventData  date)
+    {
+        for (var r = 0; r < _cells.GetLength(0); r++)
+        {
+            for (var c = 0; c < _cells.GetLength(1); c++)
+            {
+                var cell = _cells[r, c];
+                var image = cell.GetComponent<Image>();
+                if(date.pointerCurrentRaycast.gameObject == _cells[r,c])
+                {
+                    _cells[r - 1, c].gameObject.GetComponent<Image>().color = Color.black;
+                    _cells[r + 1, c].gameObject.GetComponent<Image>().color = Color.black;
+                    _cells[r , c - 1].gameObject.GetComponent<Image>().color = Color.black;
+                    _cells[r , c + 1].gameObject.GetComponent<Image>().color = Color.black;
+                }
+                //dateから配列の要素に繋がる何かを見いだせない
+                //出せたがうまく比較できない
+            }
+        }
     }
 }
